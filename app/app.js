@@ -22,10 +22,9 @@ $(document).ready(function(e) {
     $('.home-team-pick').val('');
     $('.away-team-pick').val('');
     $('.spread-pick').val('');
-
-    console.log(localStorage);
   });
 
+  // show user picks
   $('.user-picks-container').on('click', function(e) {
     var userClicked = e.target.textContent
     var picksListUl = $('.user-picks-container').find('.picks-list');
@@ -40,14 +39,48 @@ $(document).ready(function(e) {
     } else {
       picksListValues = Object.values(JSON.parse(localStorage.getItem(userClicked)));
     }
+
+    var winLossPushForm = function(user) {
+      <form action="/action_page.php" method="get">
+        <input type="checkbox" name="vehicle" value="Bike"> I have a bike<br>
+        <input type="checkbox" name="vehicle" value="Car" checked="checked"> I have a car<br>
+        <input type="submit" value="Submit">
+      </form>
+    }
+
     if (picksListValues.length === 0) {
       picksListUl.append(`<p>no picks made yet</p>`)
     } else {
       for (var i = 0; i < picksListValues.length; i++) {
         picksListUl.append(`<p>${picksListValues[i]}</p>`)
+        picksListUl.append(`<input type="checkbox" name="" value="Win">Win`)
+        picksListUl.append(`<input type="checkbox" name="" value="Loss">Loss`)
+        picksListUl.append(`<input type="checkbox" name="" value="Push">Push`)
+        <form action="/action_page.php" method="get">
+          <input type="checkbox" name="vehicle" value="Bike"> I have a bike<br>
+          <input type="checkbox" name="vehicle" value="Car" checked="checked"> I have a car<br>
+          <input type="submit" value="Submit">
+          </form>
       }
     }
   });
+
+
+  var usersArray = Object.keys(localStorage);
+
+  // all player records
+  var records = {};
+  for (var i = 0; i < usersArray.length; i++) {
+
+  }
+
+  // set up standings board
+  for (var i = 0; i < usersArray.length; i++) {
+    $('.overall-standings').append(`<div class='${usersArray[i]}-record'>${usersArray[i]}</div>`)
+    $(`.${usersArray[i]}-record`).append('<p>0 - 0 - 0</p>')
+    $(`.${usersArray[i]}-record`).append('<p>0%</p>')
+  }
+
 
 
 
