@@ -2,7 +2,7 @@
 
 ## 2019 NFL Picks 52.38%
 
-Description - Sports Wagering industry in the US is becoming more popular and accepted. I want to make it easy for users and their friends to track their records against each other throughout a NFL Football Season. For fun, we can transparently see who is the best at predicting football results.
+Description - Sports Wagering industry in the US is increasingly becoming more popular and accepted. Sports franchise valuations may double in the next few years when it becomes legalized. I want to make it easy for users and their friends to keep track of their records against each other throughout a NFL Football Season. They will be able to transparently see who is the best at predicting football results, let the trash talk begin!
 
 ### Key Object(s) (nouns)
 - Basic data keeping:
