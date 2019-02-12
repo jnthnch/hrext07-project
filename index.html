@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.js"
+      integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+      crossorigin="anonymous"></script>
+
+    <script src="app/app.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+
+    <h1>2019 NFL Picks</h1>
+
+    <div class="pick-container">
+
+      <select class="user-name" name="">
+        <option value="" selected disabled hidden>user</option>
+        <option value="jon">jon</option>
+        <option value="grant">grant</option>
+        <option value="scott">scott</option>
+      </select>
+
+      <div>
+        home team
+        <input type="text" class="home-team-pick">
+      </div>
+
+      <div>
+        away team
+        <input type="text" class="away-team-pick">
+      </div>
+
+      <div>
+        your pick
+        <input type="text" class="spread-pick">
+      </div>
+
+      <button type="button" name="button" class="submit-pick-button">submit pick</button>
+
+    </div>
+
+    <div class="user-picks-container">
+      <!-- <select class="show-picks-name" name="">
+        <option value="" selected disabled hidden>user</option>
+        <option value="jon">jon</option>
+        <option value="grant">grant</option>
+        <option value="scott">scott</option>
+      </select> -->
+      show picks
+      <!-- <button type="" name="button" class="show-picks-button">show picks</button> -->
+      <button type="" name="button" class="jon-show-picks-button">jon</button>
+      <button type="" name="button" class="grant-show-picks-button">grant</button>
+      <button type="" name="button" class="scott-show-picks-button">scott</button>
+      <ul class="picks-list">
+      </ul>
+    </div>
+
+
+
+
+  </body>
+</html>
