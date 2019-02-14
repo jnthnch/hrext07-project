@@ -73,16 +73,20 @@ $(document).ready(function(e) {
 
   $('.create-user-button').on('click', function(e) {
     var username = $('.new-username').val();
+    if (username === "") {
+      alert(`CANNOT LEAVE USERNAME BLANK`)
+      return;
+    }
     $('.new-username').val('');
     createNewUser(username);
   });
 
-  // result parameter needs to be 'wins' 'losses' or 'pushes'
+  // RESULT parameter needs to be either 'wins' 'losses' or 'pushes'
   var updateRecordsLocalStorage = function(user, result) {
     var validResults = ['wins', 'losses', 'pushes'];
     if (!validResults.includes(result)) {
       console.log('invalid result parameter');
-      return
+      return;
     }
     var records = JSON.parse(localStorage.getItem('records'));
     records[user][result] += 1;
@@ -104,12 +108,14 @@ $(document).ready(function(e) {
 
   var handlePickSubmission = function() {
     // HANDLE BLANK INPUTS
-    console.log('wtf')
     var user = $('.user-name-dropdown').val();
     var homeTeamPick = $('.home-team-pick').val();
     var awayTeamPick = $('.away-team-pick').val();
     var spreadPick = $('.spread-pick').val();
-    if (homeTeamPick === "") {
+    if (user === null) {
+      alert(`PLEASE SELECT EXISTING USER`);
+      return;
+    } else if (homeTeamPick === "") {
       alert(`CAN'T LEAVE HOME TEAM BLANK`);
       return;
     } else if (awayTeamPick === "") {
@@ -122,7 +128,7 @@ $(document).ready(function(e) {
     var currentUserObject = JSON.parse(localStorage.getItem(user));
     var currentUserPicksArray = JSON.parse(localStorage.getItem(user)).picks;
     currentUserPicksArray.push(`${awayTeamPick} @ ${homeTeamPick}, pick: ${spreadPick}`)
-    currentUserObject.picks = currentUserPicksArray
+    currentUserObject.picks = currentUserPicksArray;
     localStorage.setItem(user, JSON.stringify(currentUserObject));
   };
 
@@ -186,23 +192,23 @@ $(document).ready(function(e) {
       showUserPicks(user);
     } // WHEN USER SUBMITS THEIR GAME RESULT
       else if (e.target.className.split(' ').includes('game-result-submit-button')) {
-        var eClassNameArray = e.target.className.split(' ')
-        var user = eClassNameArray[0];
-        var formNumber = eClassNameArray[eClassNameArray.length - 1];
+        var resultButtonClassNameArray = e.target.className.split(' ')
+        var user = resultButtonClassNameArray[0];
+        var formNumber = resultButtonClassNameArray[resultButtonClassNameArray.length - 1];
         var result = $(`input[name=pickResult-${formNumber}]:checked`, '.result-form').val();
         handleResultSubmission(user, result, formNumber);
     } // WHEN USER CLICKS EDIT RESULT BUTTON
       else if (e.target.className.split(' ').includes('game-result-edit-button')) {
-        var eClassNameArray = e.target.className.split(' ')
-        var user = eClassNameArray[0];
-        var formNumber = eClassNameArray[eClassNameArray.length - 1]
+        var editButtonClassNameArray = e.target.className.split(' ');
+        var user = editButtonClassNameArray[0];
+        var formNumber = editButtonClassNameArray[editButtonClassNameArray.length - 1]
         reshowResultButtons(user, formNumber);
         deleteResultEditButton(user, formNumber);
       }
   });
 
   var handleResultSubmission = function(user, result, formNumber) {
-    tallyLocalRecord(user, result);
+    tallyLocalRecord(user, result, formNumber);
     showPickResult(user, result, formNumber);
     hideResultButtons(user, formNumber)
   }
@@ -234,7 +240,6 @@ $(document).ready(function(e) {
     $(`.radio-buttons-set.${formNumber}`)[0].style.display = "none"
   }
 
-
   var reshowResultButtons = function(user, formNumber) {
     $(`.radio-buttons-set.${formNumber}`)[0].style.display = "block"
     $(`.${user}.game-result-submit-button.${formNumber}`)[0].style.display = "block"
@@ -244,9 +249,18 @@ $(document).ready(function(e) {
     $(`.${user}.post-result-submit-form.${formNumber}`).remove();
   };
 
-  var tallyLocalRecord = function(user, result) {
+  var tallyLocalRecord = function(user, result, formNumber) {
     var userObjValue = JSON.parse(localStorage.getItem(user));
+    // UPDATE RECORDS IN LOCALSTORAGE
     userObjValue.records[result] += 1;
+    localStorage.setItem(user, JSON.stringify(userObjValue));
+    // UPDATE PICK WITH RESULT IN LOCALSTORAGE
+    var resultKey = {
+      'wins': 'result: WIN',
+      'losses': 'result: LOSS',
+      'pushes': 'result: PUSH'
+    }
+    userObjValue.picks[formNumber] += `result: ${resultKey[result]}`
     localStorage.setItem(user, JSON.stringify(userObjValue));
   };
 
