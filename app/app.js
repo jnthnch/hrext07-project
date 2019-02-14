@@ -1,25 +1,5 @@
 $(document).ready(function(e) {
 
-  // // get list of all users
-  // var allUsers = [];
-  // var allUserButtonsCount = $('.user-name-dropdown')[0].childElementCount - 1;
-  // var allUserButtons = $('.user-name-dropdown')[0];
-  // for (let i = 1; i < allUserButtonsCount + 1; i++) {
-  //   allUsers.push(allUserButtons[i].value);
-  // }
-  //
-  // // set up all player records
-  // var allRecords = {};
-  // for (let i = 0; i < allUsers.length; i++) {
-  //   allRecords[allUsers[i]] = {'wins': 0, "losses": 0, 'pushes': 0}
-  // }
-  //
-  // // SET UP STANDINGS BOARD
-  // for (let i = 0; i < allUsers.length; i++) {
-  //   $('.overall-standings').append(`<div class='${allUsers[i]}-record'>${allUsers[i]}</div>`)
-  //   $(`.${allUsers[i]}-record`).append('<p>0 - 0 - 0</p>')
-  //   $(`.${allUsers[i]}-record`).append('<p>0%</p>')
-  // }
 
   // CREATING NEW USER
   var createNewUser = function(user) {
@@ -27,7 +7,8 @@ $(document).ready(function(e) {
     addUserButton(user);
     var userValueObj = {
       records: {'wins': 0, 'losses': 0, 'pushes': 0},
-      picks: []
+      picks: [],
+      results: []
     };
 
     if (localStorage.getItem(user) === null) {
@@ -93,19 +74,6 @@ $(document).ready(function(e) {
     localStorage.setItem('records', JSON.stringify(records));
   };
 
-
-  var storage =
-    {
-      'jon': {
-        records: {'wins': 0, 'losses': 0, 'pushes': 0},
-        picks: {}
-      },
-      'grant': {
-        records: {'wins': 0, 'losses': 0, 'pushes': 0},
-        picks: {}
-      }
-  };
-
   var handlePickSubmission = function() {
     // HANDLE BLANK INPUTS
     var user = $('.user-name-dropdown').val();
@@ -139,7 +107,7 @@ $(document).ready(function(e) {
   };
 
 
-  // when a user  submits picks
+  // WHEN USER SUBMITS PICK
   $('.submit-pick-button').on('click', function(e) {
     handlePickSubmission();
     clearEntryFields();
@@ -202,6 +170,8 @@ $(document).ready(function(e) {
         var editButtonClassNameArray = e.target.className.split(' ');
         var user = editButtonClassNameArray[0];
         var formNumber = editButtonClassNameArray[editButtonClassNameArray.length - 1]
+        var result = $(`input[name=pickResult-${formNumber}]:checked`, '.result-form').val();
+        removePreviousRecordTally(user, result, formNumber);
         reshowResultButtons(user, formNumber);
         deleteResultEditButton(user, formNumber);
       }
@@ -257,13 +227,22 @@ $(document).ready(function(e) {
     localStorage.setItem(user, JSON.stringify(userObjValue));
     // UPDATE PICK WITH RESULT IN LOCALSTORAGE
     var resultKey = {
-      'wins': 'result: WIN',
-      'losses': 'result: LOSS',
-      'pushes': 'result: PUSH'
+      'wins': 'WIN',
+      'losses': 'LOSS',
+      'pushes': 'PUSH'
     }
-    userObjValue.picks[formNumber] += `result: ${resultKey[result]}`
+    // FORMNUMBER IS LITERAL, HERE WE SUBTRACT 1 BECAUSE IT'S INDEXING
+    userObjValue.results[formNumber - 1] = `result: ${resultKey[result]}`
     localStorage.setItem(user, JSON.stringify(userObjValue));
   };
+
+
+  var removePreviousRecordTally = function(user, result, formNumber) {
+    var userObjValue = JSON.parse(localStorage.getItem(user));
+    // UPDATE RECORDS IN LOCALSTORAGE
+    userObjValue.records[result] -= 1;
+    localStorage.setItem(user, JSON.stringify(userObjValue));
+  }
 
   var updateStandingsTable = function() {
     // REMOVE EVERYTHING EXCEPT TOP ROW STANDINGS
@@ -290,7 +269,7 @@ $(document).ready(function(e) {
     // ADD WIN% DATA COLUMN
     var winRate = ((wins / (wins + losses)) * 100).toFixed(2);
     // ACCOUNT FOR EMPTY RECORD
-    if (wins + losses === 0) { winRate = 0 };
+    if (wins + losses === 0) { winRate = '0.00' };
     $(`.${user}-row`).append(`<td class=${user}-winRate>${winRate}%</td>`)
   }
 
@@ -313,42 +292,6 @@ $(document).ready(function(e) {
 
   createStandingsTable();
 
-
-
-  // $('.user-picks-container').on('click', function(e) {
-  //   var userClicked = e.target.textContent
-  //
-  //   // if NAME button was clicked
-  //   if (e.target.name === 'show-pick-button') {
-  //     showUserPicks(userClicked);
-  //     // if SUBMIT button was clicked
-  //   } else if (e.target.className === 'game-result-submit-button') {
-  //
-  //     }
-  //
-  //     var findUserSubmitResult = function() {
-  //       var userSubmitted;
-  //       // update user record based on SUBMIT button
-  //       // convert classList from DOMTokenList to Array
-  //       var classList = Array.from($('.picks-list')[0].className.split(' '));
-  //       for (let i = 0; i < allUsers.length; i++) {
-  //         if (classList.includes(allUsers[i])) {
-  //           userSubmitted = allUsers[i];
-  //         }
-  //       }
-  //       return userSubmitted;
-  //     }
-  //
-  //     var updatePickWithResult = function(result) {
-  //
-  //     }
-  //
-  //     var getRadioResult = function(formNumber) {
-  //       var userResult = $(`input[name=pickResult-${formNumber + 1}]:checked`, '.result-form').val()
-  //       return userResult;
-  //     }
-  //     // go through each form and find out which RADIO button was selected
-  // });
 
 
 
