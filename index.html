@@ -14,56 +14,66 @@
   <body>
 
     <h1>2019 NFL Picks</h1>
+    <div class="everything">
 
-    <div class="pick-container">
-
-      <select class="user-name" name="">
-        <option value="" selected disabled hidden>user</option>
-        <option value="jon">jon</option>
-        <option value="grant">grant</option>
-        <option value="scott">scott</option>
-      </select>
-
-      <div>
-        home team
-        <input type="text" class="home-team-pick">
+      <div class="create-user">
+        <header>
+          Create New Username
+        </header>
+        <input type="text" name="" placeholder="username" class="new-username">
+        <button type="button" class="create-user-button">create</button>
       </div>
 
-      <div>
-        away team
-        <input type="text" class="away-team-pick">
+      <br>
+
+      <div class="pick-container">
+
+        <!-- EXISTING USERS DROPDOWN MENU -->
+        <header>
+          Existing Users
+        </header>
+        <select class="user-name-dropdown" name="">
+          <option value="" selected disabled hidden>select</option>
+        </select>
+
+        <!-- PICK FORMS -->
+        <div>
+          home team
+          <input type="text" class="home-team-pick">
+        </div>
+        <div>
+          away team
+          <input type="text" class="away-team-pick">
+        </div>
+        <div>
+          your pick
+          <input type="text" class="spread-pick">
+        </div>
+
+        <button type="button" name="button" class="submit-pick-button">submit pick</button>
+
       </div>
 
-      <div>
-        your pick
-        <input type="text" class="spread-pick">
+      <div class="user-picks-container">
+
+        <!-- SHOW USER PICK BUTTONS  -->
+        <h2>show this week's picks</h2>
+        <div class="user-show-picks-button">
+        </div>
+
+        <ul class="picks-list">
+        </ul>
+
       </div>
 
-      <button type="button" name="button" class="submit-pick-button">submit pick</button>
-
+      <!-- OVERALL STANDINGS -->
+      <div class="overall-standings">
+        <h2>overall standings</h2>
+        <ul>
+        </ul>
+      </div>
     </div>
 
-    <div class="user-picks-container">
-      <!-- <select class="show-picks-name" name="">
-        <option value="" selected disabled hidden>user</option>
-        <option value="jon">jon</option>
-        <option value="grant">grant</option>
-        <option value="scott">scott</option>
-      </select> -->
-      <h2>show this week's picks</h2>
-      <!-- <button type="" name="button" class="show-picks-button">show picks</button> -->
-      <button type="" name="show-pick-button" class="jon-show-picks-button">jon</button>
-      <button type="" name="show-pick-button" class="grant-show-picks-button">grant</button>
-      <button type="" name="show-pick-button" class="scott-show-picks-button">scott</button>
-      <ul class="picks-list">
-      </ul>
-    </div>
-
-    <div class="overall-standings">
-      <h2>overall standings</h2>
-      <ul>
-      </ul>
-    </div>
 
 
 
