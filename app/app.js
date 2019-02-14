@@ -211,6 +211,7 @@ $(document).ready(function(e) {
     tallyLocalRecord(user, result, formNumber);
     showPickResult(user, result, formNumber);
     hideResultButtons(user, formNumber)
+    updateStandingsTable();
   }
 
   var resultForm = function(user, result, formNumber) {
@@ -263,6 +264,55 @@ $(document).ready(function(e) {
     userObjValue.picks[formNumber] += `result: ${resultKey[result]}`
     localStorage.setItem(user, JSON.stringify(userObjValue));
   };
+
+  var updateStandingsTable = function() {
+    // REMOVE EVERYTHING EXCEPT TOP ROW STANDINGS
+    $(`.top-row-standings`).siblings().remove();
+    createStandingsTable();
+  }
+
+  var createStandingsTable = function() {
+    addLocalStorageUsersToStandings();
+    addUserDataToStandings();
+  }
+
+  var userTableRow = function(user) {
+    return (
+      `<tr class=${user}-row>
+        <td class=${user}-name>${user}</td>
+      </tr>`
+    )
+  };
+
+  var addUserDataRow = function(user, wins, losses, pushes) {
+    // ADD W-L-P DATA COLUMN
+    $(`.${user}-row`).append(`<td class=${user}-wins-loss-push-record>${wins} - ${losses} - ${pushes}</td>`)
+    // ADD WIN% DATA COLUMN
+    var winRate = ((wins / (wins + losses)) * 100).toFixed(2);
+    // ACCOUNT FOR EMPTY RECORD
+    if (wins + losses === 0) { winRate = 0 };
+    $(`.${user}-row`).append(`<td class=${user}-winRate>${winRate}%</td>`)
+  }
+
+  var addLocalStorageUsersToStandings = function() {
+    for (var i = 0; i < localStorage.length; i++) {
+      $(`.standings-table`).append(userTableRow(localStorage.key(i)))
+    }
+  };
+
+  var addUserDataToStandings = function() {
+    for (var i = 0; i < localStorage.length; i++) {
+      var user = localStorage.key(i)
+      var userRecordsData = JSON.parse(localStorage.getItem(localStorage.key(i))).records;
+      var userWins = userRecordsData.wins;
+      var userLosses = userRecordsData.losses;
+      var userPushes = userRecordsData.pushes;
+      addUserDataRow(user, userWins, userLosses, userPushes);
+    }
+  }
+
+  createStandingsTable();
+
 
 
   // $('.user-picks-container').on('click', function(e) {
