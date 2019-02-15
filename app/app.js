@@ -136,9 +136,16 @@ $(document).ready(function(e) {
     )
   };
 
+  var nonEditResultForm = function(result) {
+    return (
+      `<p>${result}</p>`
+    )
+  }
+
   // SHOW USER PICKS ON PAGE WHEN SHOW BUTTON IS PRESSED
   var showUserPicks = function(user) {
     var picksList = JSON.parse(localStorage.getItem(user)).picks
+    var resultsList = JSON.parse(localStorage.getItem(user)).results
     // HTML element
     var picksListUl = $('.user-picks-container').find('.picks-list');
     picksListUl[0].innerHTML = '';
@@ -147,8 +154,17 @@ $(document).ready(function(e) {
       picksListUl.append(`<p>no picks made yet</p>`);
     } else {
       for (var i = 0; i < picksList.length; i++) {
-        picksListUl.append(`<p>${picksList[i]}</p>`)
-        picksListUl.append(winLossForm(user, i));
+        // IF USER HASN"T SUBMITTED RESULT FOR PICK YET
+        if (resultsList[i] === undefined) {
+          picksListUl.append(`<p>${picksList[i]}</p>`)
+          picksListUl.append(winLossForm(user, i));
+        }
+        // IF USER PREVIOUSLY SUBMITTED RESULT, JUST SHOW RESULT
+          else {
+
+          picksListUl.append(`<p>${picksList[i]}</p>`)
+          picksListUl.append(nonEditResultForm(resultsList[i]));
+        }
       }
     }
   };
@@ -164,6 +180,11 @@ $(document).ready(function(e) {
         var user = resultButtonClassNameArray[0];
         var formNumber = resultButtonClassNameArray[resultButtonClassNameArray.length - 1];
         var result = $(`input[name=pickResult-${formNumber}]:checked`, '.result-form').val();
+        // IF NO SELECTION IS MADE ON SUBMIT BUTTON
+        if (result === undefined) {
+          alert('PLEASE SELECT RESULT')
+          return;
+        }
         handleResultSubmission(user, result, formNumber);
     } // WHEN USER CLICKS EDIT RESULT BUTTON
       else if (e.target.className.split(' ').includes('game-result-edit-button')) {
@@ -203,6 +224,7 @@ $(document).ready(function(e) {
   };
 
   var showPickResult = function(user, result, formNumber) {
+    // resultFORM 'result' MUST be wins, losses, or pushes
     $(`.result-form.${formNumber}`).append(resultForm(user, result, formNumber));
   }
 
@@ -212,6 +234,7 @@ $(document).ready(function(e) {
   }
 
   var reshowResultButtons = function(user, formNumber) {
+
     $(`.radio-buttons-set.${formNumber}`)[0].style.display = "block"
     $(`.${user}.game-result-submit-button.${formNumber}`)[0].style.display = "block"
   };
@@ -269,7 +292,7 @@ $(document).ready(function(e) {
     // ADD WIN% DATA COLUMN
     var winRate = ((wins / (wins + losses)) * 100).toFixed(2);
     // ACCOUNT FOR EMPTY RECORD
-    if (wins + losses === 0) { winRate = '0.00' };
+    if (wins + losses === 0) { winRate = 0 };
     $(`.${user}-row`).append(`<td class=${user}-winRate>${winRate}%</td>`)
   }
 
