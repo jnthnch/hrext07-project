@@ -316,7 +316,4 @@ $(document).ready(function(e) {
   createStandingsTable();
 
 
-
-
-
 });
